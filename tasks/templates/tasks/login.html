@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Task: Login{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="width: 50%;">
+    <div class="login-card">
+        <h2 class="text-center">Login</h2>
+        <form>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Enter your username">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter your password">
+            </div>
+            <button type="submit" class="btn btn-login btn-block">Login</button>
+            <div class="mb-3 mt-3">
+                <p>Not registerd? <a href="{% url 'register' %}">Register here</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
