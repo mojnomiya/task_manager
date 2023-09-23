@@ -59,9 +59,14 @@
                             <td class="col-2">{{task.due_date}}</td>
                             <td class="col-4">
                                 <a href="{% url 'view_task' task.id %}"><button class="btn btn-outline-success">Details</button></a>
-                                <a href=""><button class="btn btn-outline-danger">Edit</button></a>
-                                <a href=""><button class="btn btn-outline-success">Compete</button></a>
-                                <a href=""><button class="btn btn-outline-danger">Delete</button></a>
+                                <a href="{% url 'edit_task' task.id %}"><button class="btn btn-outline-danger">Edit</button></a>
+                                <div style="display: inline-block;" class="form-inline">
+                                    <form method="post" action="{% url 'mark-complete' task.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-outline-success">Complete</button>
+                                    </form>
+                                </div>
+                                <a href="{% url 'task_delete' task.id %}"><button class="btn btn-outline-danger">Delete</button></a>
                             </td>
                         </tr>
                         {% endfor %}

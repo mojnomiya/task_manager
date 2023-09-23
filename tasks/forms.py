@@ -55,6 +55,7 @@ class TaskForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs.update({
-                'class': 'form-control',
-            })
+            if field != 'is_complete':
+                self.fields[field].widget.attrs.update({
+                    'class': 'form-control',
+                })

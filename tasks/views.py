@@ -1,8 +1,8 @@
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import FormView, TemplateView, CreateView, ListView, DetailView
+from django.views.generic import FormView, TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.contrib.auth import login, authenticate, logout
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 
@@ -19,7 +19,7 @@ class HomeView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        search_query = self.request.GET.get('search', '')
+        search_query = self.request.GET.get('q', '')
         filter_query = Q()
 
         if search_query:
@@ -37,6 +37,7 @@ class HomeView(ListView):
         if completion_status_filter:
             filter_query &= Q(is_complete=(completion_status_filter == 'True'))
 
+        filter_query &= Q(is_complete=False)
         return queryset.filter(filter_query)
 
 class RegisterView(FormView):
@@ -98,3 +99,52 @@ class ViewTaskView(DetailView):
     template_name = 'tasks/task_detail.html'
     context_object_name = 'task'
     pk_url_kwarg = 'task_id'
+
+
+class UpdateTaskView(UpdateView):
+    model = Tasks
+    form_class = TaskForm
+    template_name = 'tasks/edit_task.html'
+    context_object_name = 'task'
+    pk_url_kwarg = 'task_id'
+
+    def get_success_url(self):
+        return reverse('home') 
+    
+class MarkTaskCompleteView(View):
+    def post(self, request, task_id):
+        task = get_object_or_404(Tasks, pk=task_id)
+        task.is_complete = True
+        task.save()
+        return redirect('home') 
+
+class CompletedTasksView(ListView):
+    model = Tasks
+    template_name = 'tasks/completed_tasks.html'
+    context_object_name = 'tasks'
+    ordering = ['-created_at']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('search', '')
+        filter_query = Q()
+
+        if search_query:
+            filter_query |= Q(title__icontains=search_query)
+
+        completion_status_filter = self.request.GET.get('is_complete', '')
+        if completion_status_filter:
+            filter_query &= Q(is_complete=(completion_status_filter == 'True'))
+            
+        filter_query &= Q(is_complete=True)
+        return queryset.filter(filter_query)
+    
+class TaskDeleteView(DeleteView):
+    model = Tasks
+    success_url = reverse_lazy('home')
+    template_name = 'tasks/task_confirm_delete.html'
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        # You can add permission checks here if needed
+        return obj

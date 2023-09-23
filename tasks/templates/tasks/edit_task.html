@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}Task: Add Task{% endblock %}
+{% block title %}Task: {{task.title}} {% endblock %}
 
 {% block content %}
 <div class="container mt-5" style="width: 50%;">
     <div class="login-card">
-        <h2 class="text-center">Add to Task</h2>
+        <h2 class="text-center">Update Task</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             
@@ -13,8 +13,12 @@
             {{ form.due_date.label_tag }} {{ form.due_date }}
             {{ form.photos.label_tag }} {{ form.photos }}
             {{ form.priority.label_tag }} {{ form.priority }}
+            <div class="form-control mt-2">
+                {{ form.is_complete.label_tag }} 
+                {{ form.is_complete }}
+            </div>
             
-            <button type="submit" class="mt-2 btn btn-login btn-block">Add Task</button>
+            <button type="submit" class="mt-2 mb-3 btn btn-outline-success btn-block">Edit</button>
         </form>
     </div>
 </div>
