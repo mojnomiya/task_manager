@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Task: Home {% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">{{ task.title }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="{{ task.photos.url }}" alt="{{ task.title }}" class="img-fluid">
+                </div>
+                <div class="col-md-8">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Description:</strong><br>
+                            {{ task.description }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Due Date:</strong> {{ task.due_date }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Priority:</strong> {{ task.get_priority_display }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Is Complete:</strong> {% if task.is_complete %} Yes {% else %} No {% endif %}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Created By:</strong> {{ task.created_by }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Created At:</strong> {{ task.created_at }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Last Updated:</strong> {{ task.last_updated }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
