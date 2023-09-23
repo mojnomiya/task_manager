@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import HomeView, RegisterView, LoginView, LogoutView, AddTaskView, ViewTaskView, UpdateTaskView, MarkTaskCompleteView, CompletedTasksView, TaskDeleteView
+from . import api_views
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -13,5 +14,8 @@ urlpatterns = [
     path('tasks/mark-completed/<int:task_id>', MarkTaskCompleteView.as_view(), name='mark-complete'),
     path('tasks/completed-tasks/', CompletedTasksView.as_view(), name='completed-tasks'),
     path('tasks/delete/<int:pk>/', TaskDeleteView.as_view(), name='task_delete'),
+
+    path('api/tasks/', api_views.TaskListCreateView.as_view(), name='task-list-create'),
+    path('api/tasks/<int:pk>/', api_views.TaskRetrieveUpdateDeleteView.as_view(), name='task-retrieve-update-delete'),
 
 ]

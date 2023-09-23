@@ -10,27 +10,39 @@
                 <div class="form-group">
                     <label for="category">Filter:</label>
                     <div class="input-group">
-                        <label class="form-control">Priority:</label>
-                        <select class="form-control" name="priority">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="created_at">Created at:</label>
+                        </div>
+                        <input class="form-control" type="date" id="created_at" name="created_at" placeholder="Select Creation Date">
+                    
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="priority">Priority:</label>
+                        </div>
+                        <select class="custom-select" id="priority" name="priority">
                             <option value="">All</option>
                             <option value="Low">Low</option>
                             <option value="Medium">Medium</option>
                             <option value="High">High</option>
                         </select>
-
-                        <label class="form-control">Due Date:</label>
-                        <input class="form-control" type="date" name="due_date" placeholder="Select due date">
-
-                        <label class="form-control">Completion Status:</label>
-                        <select class="form-control" name="is_complete">
+                    
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="due_date">Due Date:</label>
+                        </div>
+                        <input class="form-control" type="date" id="due_date" name="due_date" placeholder="Select due date">
+                    
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="is_complete">Completion Status:</label>
+                        </div>
+                        <select class="custom-select" id="is_complete" name="is_complete">
                             <option value="">All</option>
                             <option value="True">Complete</option>
                             <option value="False">Incomplete</option>
                         </select>
-                        <div class="form-control">
+                    
+                        <div class="input-group-append">
                             <button class="btn btn-outline-success" type="submit">Apply Filters</button>
                         </div>
-                    </div>
+                    </div>                    
                 </div>
                 </form>
             </div>

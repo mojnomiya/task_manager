@@ -5,25 +5,37 @@ from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.utils.datetime_safe import datetime
 
 from .forms import UserRegForm, UserLoginForm
 from .models import Tasks
 from .forms import TaskForm
 
 # Create your views here.
-class HomeView(ListView):
+class HomeView(LoginRequiredMixin, ListView):
     model = Tasks
     template_name = 'tasks/index.html'
     context_object_name = 'tasks'
     ordering = ['-created_at']
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = Tasks.objects.filter(created_by=self.request.user)
+
         search_query = self.request.GET.get('q', '')
         filter_query = Q()
 
         if search_query:
             filter_query |= Q(title__icontains=search_query)
+
+        created_at_filter = self.request.GET.get('created_at', '')
+        if created_at_filter:
+            try:
+                created_at_filter_date = datetime.strptime(created_at_filter, '%Y-%m-%d').date()
+            except ValueError:
+                created_at_filter_date = None
+
+            if created_at_filter_date:
+                filter_query &= Q(created_at__date=created_at_filter_date)
 
         priority_filter = self.request.GET.get('priority', '')
         if priority_filter:
@@ -31,14 +43,22 @@ class HomeView(ListView):
 
         due_date_filter = self.request.GET.get('due_date', '')
         if due_date_filter:
-            filter_query &= Q(due_date=due_date_filter)
+            try:
+                due_date_filter_date = datetime.strptime(due_date_filter, '%Y-%m-%d').date()
+            except ValueError:
+                due_date_filter_date = None
+            
+            if due_date_filter_date:
+                filter_query &= Q(due_date=due_date_filter_date)
 
         completion_status_filter = self.request.GET.get('is_complete', '')
         if completion_status_filter:
             filter_query &= Q(is_complete=(completion_status_filter == 'True'))
 
         filter_query &= Q(is_complete=False)
-        return queryset.filter(filter_query)
+        queryset = queryset.filter(filter_query)
+
+        return queryset
 
 class RegisterView(FormView):
     template_name = 'tasks/register.html'
@@ -118,15 +138,16 @@ class MarkTaskCompleteView(View):
         task.save()
         return redirect('home') 
 
-class CompletedTasksView(ListView):
+class CompletedTasksView(LoginRequiredMixin, ListView):
     model = Tasks
     template_name = 'tasks/completed_tasks.html'
     context_object_name = 'tasks'
     ordering = ['-created_at']
+    
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        search_query = self.request.GET.get('search', '')
+        queryset = Tasks.objects.filter(created_by=self.request.user)
+        search_query = self.request.GET.get('q', '')
         filter_query = Q()
 
         if search_query:
@@ -146,5 +167,4 @@ class TaskDeleteView(DeleteView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
-        # You can add permission checks here if needed
         return obj

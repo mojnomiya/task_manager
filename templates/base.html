@@ -10,7 +10,7 @@
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Task Manager</a>
+          <a class="navbar-brand text-uppercase fw-bold" href="{% url 'home' %}">Task Manager</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -26,6 +26,9 @@
                 <a class="nav-link" href="{% url 'completed-tasks' %}">Completed Tasks</a>
               </li>
             </ul>
+            <div class="m-3 text-center">
+              <strong>Welcome,</strong> {{ request.user.get_full_name }}
+            </div>
             <form class="d-flex" role="search">
               <input name="q" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-success" type="submit">Search</button>
