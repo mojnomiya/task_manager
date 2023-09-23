@@ -1,9 +1,13 @@
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, TemplateView, CreateView
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .forms import UserRegForm, UserLoginForm
+from .models import Tasks
+from .forms import TaskForm
 
 # Create your views here.
 class HomeView(TemplateView):
@@ -50,3 +54,15 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect(reverse_lazy('login'))
+    
+class AddTaskView(LoginRequiredMixin, CreateView):
+    model = Tasks
+    form_class = TaskForm
+    template_name = 'tasks/add_tasks.html'
+    success_url = '/home/'
+
+    def form_valid(self, form):
+        task = form.save(commit=False)
+        task.created_by = self.request.user
+        task.save()
+        return super().form_valid(form)

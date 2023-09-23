@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Task: Add Task{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="width: 50%;">
+    <div class="login-card">
+        <h2 class="text-center">Add to Task</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {{ form.title.label_tag }} {{ form.title }}
+            {{ form.description.label_tag }} {{ form.description }}
+            {{ form.due_date.label_tag }} {{ form.due_date }}
+            {{ form.photos.label_tag }} {{ form.photos }}
+            {{ form.priority.label_tag }} {{ form.priority }}
+            
+            <button type="submit" class="mt-2 btn btn-login btn-block">Add Task</button>
+          </form>
+
+    </div>
+</div>
+{% endblock %}
