@@ -1,7 +1,5 @@
-```markdown
 # Task Manager
-
-A brief project description goes here.
+A simple and easy to use task manager app. User can create account, login and add tasks. Perform actions like edit delete and marking as completed.
 
 ## Table of Contents
 
@@ -64,8 +62,8 @@ Example `.env` file:
 ```
 SECRET_KEY=your_secret_key_here
 DEBUG=True
-DB_NAME= "task_manager"
-DB_PASSWORD= "your_password"
+DB_NAME=task_manager
+DB_PASSWORD=your_password
 ```
 
 ## API Documentation
@@ -126,4 +124,3 @@ DB_PASSWORD= "your_password"
 
 **Response (DELETE):**
 - Status Code: 204 No Content (Task deleted).
-```
